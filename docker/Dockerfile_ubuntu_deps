@@ -9,7 +9,7 @@ LABEL maintainer="AliceVision Team alicevision-team@googlegroups.com"
 
 ENV MESHROOM_DEV=/opt/Meshroom \
     MESHROOM_BUILD=/tmp/Meshroom_build \
-    QT_DIR=/opt/Qt/5.15.2/gcc_64 \
+    QT_DIR=/opt/Qt/6.8.3/gcc_64 \
     QT_CI_LOGIN=alicevisionjunk@gmail.com \
     QT_CI_P=azerty1.
 
@@ -38,7 +38,9 @@ RUN apt-get update && \
 	libqt5charts5-dev \
         libxcb-keysyms1 \
         libxcb-image0 \
+        libxkbcommon-dev \
         libxkbcommon-x11-0 \
+        libxkbcommon-x11-dev \
 	libz-dev \
 	systemd \
 	ssh
@@ -55,7 +57,9 @@ COPY dl/qt.run /tmp/qt
 RUN chmod +x qt.run
 RUN ./qt.run --verbose --email ${QT_CI_LOGIN} --password ${QT_CI_P} --accept-obligations --accept-licenses \
     --default-answer --platform minimal --no-force-installations --no-default-installations --confirm-command \
-    install qt.qt5.5152.gcc_64 qt.qt5.5152.qtcharts qt.qt5.5152.qtcharts.gcc_64
+    install qt.qt6.683.addons.qt5compat qt.qt6.683.linux_gcc_64 qt.qt6.683.addons.qtcharts \
+        qt.qt6.683.addons.qt3d.linux_gcc_64 qt.qt6.683.addons.qtcharts.linux_gcc_64 qt.qt6.683.addons.qt3d \
+    -t /opt/Qt
 RUN rm qt.run
 
 COPY ./*requirements.txt ./setup.py ${MESHROOM_DEV}/
